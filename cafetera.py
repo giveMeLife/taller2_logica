@@ -4,14 +4,14 @@ import  skfuzzy  as  fuzz
 import numpy as np
 import matplotlib.pyplot as plt
 
-cantidadCafe = 90
-temperatura = 120
-intensidad = 3
+cantidadCafe = 100
+temperatura = 25
+intensidad = 4
 tipo = 'Espresso'
 
 
 tamano_taza = np.arange(0, 450, 30)
-temperatura_ambiental = np.arange(0, 450, 30)
+temperatura_ambiental = np.arange(0, 45, 3)
 intensidad_cafe = np.arange(0,6, 0.4 )
 
 
@@ -38,9 +38,9 @@ tamT_lo = fuzz.trimf(tamano_taza, [0, 0, 150])
 tamT_md = fuzz.trimf(tamano_taza, [90, 150, 250])
 tamT_hi = fuzz.trimf(tamano_taza, [150, 450, 450])
 
-tempA_lo = fuzz.trimf(temperatura_ambiental, [0, 0, 150])
-tempA_md = fuzz.trimf(temperatura_ambiental, [90, 150, 250])
-tempA_hi = fuzz.trimf(temperatura_ambiental, [150, 450, 450])
+tempA_lo = fuzz.trimf(temperatura_ambiental, [0, 0, 18])
+tempA_md = fuzz.trimf(temperatura_ambiental, [9, 24, 30])
+tempA_hi = fuzz.trimf(temperatura_ambiental, [27, 45, 45])
 
 intC_lo = fuzz.trimf(intensidad_cafe, [0, 0, 3])
 intC_md = fuzz.trimf(intensidad_cafe, [0, 3, 4])
@@ -63,49 +63,6 @@ cantT_lo = fuzz.trimf(tiempo_preparacion, [0,0,1])
 cantT_md = fuzz.trimf(tiempo_preparacion, [0.8,1,2])
 cantT_hi = fuzz.trimf(tiempo_preparacion, [1.8,2,3]) 
 
-
-
-'''
-
-x_qual = np.arange(0, 11, 1)
-x_serv = np.arange(0, 11, 1)
-x_tip  = np.arange(0, 26, 1)
-
-# Generate fuzzy membership functions
-qual_lo = fuzz.trimf(x_qual, [0, 0, 5])
-qual_md = fuzz.trimf(x_qual, [0, 5, 10])
-qual_hi = fuzz.trimf(x_qual, [5, 10, 10])
-serv_lo = fuzz.trimf(x_serv, [0, 0, 5])
-serv_md = fuzz.trimf(x_serv, [0, 5, 10])
-serv_hi = fuzz.trimf(x_serv, [5, 10, 10])
-tip_lo = fuzz.trimf(x_tip, [0, 0, 13])
-tip_md = fuzz.trimf(x_tip, [0, 13, 25])
-tip_hi = fuzz.trimf(x_tip, [13, 25, 25])
-
-
-# We need the activation of our fuzzy membership functions at these values.
-# The exact values 6.5 and 9.8 do not exist on our universes...
-# This is what fuzz.interp_membership exists for!
-qual_level_lo = fuzz.interp_membership(x_qual, qual_lo, 6.5)
-qual_level_md = fuzz.interp_membership(x_qual, qual_md, 6.5)
-qual_level_hi = fuzz.interp_membership(x_qual, qual_hi, 6.5)
-
-serv_level_lo = fuzz.interp_membership(x_serv, serv_lo, 9.8)
-serv_level_md = fuzz.interp_membership(x_serv, serv_md, 9.8)
-serv_level_hi = fuzz.interp_membership(x_serv, serv_hi, 9.8)
-print(qual_level_hi)
-print(qual_level_lo)
-print(qual_level_md)
-
-
-
-
-
-active_rule1  =  np . fmax ( qual_level_lo ,  serv_level_lo )
-
-
-
-'''
 
 '''
 interp_membership obtiene el valor de pertenencia para el parámetro ingresado
@@ -171,12 +128,12 @@ ax2.legend()
 plt.show()
 
 if tipo == 'Espresso':
-    active_rule1 = np.fmax(tamT_lo, tempA_lo,intC_lo)
-    active_rule2 = np.fmax(tamT_lo, tempA_md, intC_lo)
-    active_rule3 = np.fmax(tamT_md, tempA_md, intC_md)
-    active_rule4 = np.fmax(tamT_md, tempA_hi, intC_hi)
-    active_rule5 = np.fmax(tamT_hi, tempA_lo, intC_lo)
-    active_rule6 = np.fmax(tamT_hi, tempA_hi, intC_md)
+    active_rule1 = np.fmax(nivel_cafe_lo, np.fmax( nivel_temp_lo,nivel_int_lo))
+    active_rule2 = np.fmax(nivel_cafe_lo, np.fmax(nivel_temp_md, nivel_int_lo))
+    active_rule3 = np.fmax(nivel_cafe_md, np.fmax(nivel_temp_md, nivel_int_md))
+    active_rule4 = np.fmax(nivel_cafe_md, np.fmax(nivel_temp_hi, nivel_int_hi))
+    active_rule5 = np.fmax(nivel_cafe_hi, np.fmax(nivel_temp_lo, nivel_int_lo))
+    active_rule6 = np.fmax(nivel_cafe_hi, np.fmax(nivel_temp_hi, nivel_int_md))
 
     cons1 = np.fmin(active_rule1, np.fmin(nivelA_lo,cantC_lo, cantT_md) )
     cons2 = np.fmin(active_rule2, np.fmin(nivelA_lo,cantC_md, cantT_lo) )
@@ -184,20 +141,18 @@ if tipo == 'Espresso':
     cons4 = np.fmin(active_rule4, np.fmin(nivelA_md,cantC_md, cantT_lo) )
     cons5 = np.fmin(active_rule5, np.fmin(nivelA_hi,cantC_md, cantT_md) )
     cons6 = np.fmin(active_rule6, np.fmin(nivelA_hi,cantC_md, cantT_lo) )
+    print(nivelA_lo)
+    print(cantC_lo)
+    print(cantT_md)
 
-    # print(cons1)
-    # print('-')
-    # print(cons2)
-    # print('-')
-    # print(cons3)
-    # print('-')
-    # print(cons4)
-    # print('-')
-    # print(cons5)
-    # print('-')
-    # print(cons6)
+    print(cons1)
+    aggregated = np.fmax(cons1, np.fmax(cons2, np.fmax(cons3,np.fmax(cons4,np.fmax(cons5,cons6)))))
+    intensidad = fuzz.defuzz(intensidad_cafe, aggregated, 'centroid')
+    tip_activation = fuzz.interp_membership(intensidad_cafe, aggregated,intensidad)
+    print(cantidadCafe)
+    print(intensidad)
 
-    agua = np.zeros_like(nivel_agua)
+'''    agua = np.zeros_like(nivel_agua)
 
     # Visualize this
     fig, ax0 = plt.subplots(figsize=(8, 6))
@@ -230,7 +185,4 @@ if tipo == 'Espresso':
     print('a')
     plt.tight_layout()
     plt.show()
-
-
-
-    
+'''
