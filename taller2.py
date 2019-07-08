@@ -9,7 +9,6 @@ intensidad = 3
 tipo = 'Espresso'
 
 
-
 tamano_taza = ctrl.Antecedent(np.arange(0,450,30),'tamanoTaza')
 temperatura_ambiental = ctrl.Antecedent(np.arange(0,45,3),'tempAmbiental')
 intensidad_cafe = ctrl.Antecedent(np.arange(0,6,0.4),'intensidadCafe')
@@ -51,5 +50,21 @@ tiempo_preparacion['poca'] = fuzz.trimf(tiempo_preparacion.universe, [0,0,1])
 tiempo_preparacion['media'] = fuzz.trimf(tiempo_preparacion.universe, [0.8,1,2])
 tiempo_preparacion['mucha'] = fuzz.trimf(tiempo_preparacion.universe, [1.8,2,3])
 
+rule1 = ctrl.Rule(tamano_taza['pequeno'] & temperatura_ambiental['frio'] & intensidad_cafe['suave'], ( nivel_agua['poca'], cantidad_cafe['poca'], tiempo_preparacion['media']))
+rule2 = ctrl.Rule(tamano_taza['pequeno'] & temperatura_ambiental['calido'] & intensidad_cafe['fuerte'], ( nivel_agua['poca'], cantidad_cafe['media'], tiempo_preparacion['poca']))
+rule3 = ctrl.Rule(tamano_taza['mediano'] & temperatura_ambiental['calido'] & intensidad_cafe['medio'], ( nivel_agua['media'], cantidad_cafe['media'], tiempo_preparacion['poca']))
 
-tiempo_preparacion.view()
+
+
+
+rule1.view()
+input()
+espresso_ctrl = ctrl.ControlSystem(rule1)
+espresso = ctrl.ControlSystemSimulation(espresso_ctrl)
+
+espresso.input['tamanoTaza'] = 30
+espresso.input['tempAmbiental'] = 9
+espresso.input['intensidadCafe'] = 4
+
+espresso.compute()
+print(espresso.output['nivelAgua'])
