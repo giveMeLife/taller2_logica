@@ -15,12 +15,12 @@ def pausa():
 
 ''' 
 Función que aproxima un valor a su techo más cercano en un arreglo
-Entrada:value->entero array->arreglo numpy
+Entrada:value->entero array->arreglo lógico difuso
 Proceso: Se busca el valor con una diferencia más cercana dentro del arreglo
 salida: Retorna el valor conocido como techo
 '''
 def aprox(value, array):
-    x = np.copy(array)
+    x = np.copy(array.universe)
     x = x-value
     x = x[x>=0]
     index = x.argmin()
@@ -137,7 +137,7 @@ def rules(tipo, cantidad_preparar, temperatura_ambiente, intensidad, tamano_taza
         pausa()
         tiempo_preparacion.view(sim=preparacion)
         pausa()
-        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), (preparacion.output['nivelAgua'], preparacion.output['cantidadCafe'],0, 0, preparacion.output['tpoPreparacion']) )
+        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), ( aprox(preparacion.output['nivelAgua'], nivel_agua.universe), aprox(preparacion.output['cantidadCafe'], cantidad_cafe.universe),0, 0, aprox(preparacion.output['tpoPreparacion'], tiempo_preparacion.universe) ) )
 
         
 
@@ -189,7 +189,7 @@ def rules(tipo, cantidad_preparar, temperatura_ambiente, intensidad, tamano_taza
         pausa()
         tiempo_preparacion.view(sim=preparacion)
         pausa()
-        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), (preparacion.output['nivelAgua'], preparacion.output['cantidadCafe'], preparacion.output['cantidadLeche'], 0, preparacion.output['tpoPreparacion']) )
+        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), (aprox(preparacion.output['nivelAgua'],nivel_agua), aprox(preparacion.output['cantidadCafe'], cantidad_cafe), aprox(preparacion.output['cantidadLeche'],cantidad_leche), 0, aprox(preparacion.output['tpoPreparacion'],tiempo_preparacion) ))
 
     if tipo == 'latte':
         rule1 = ctrl.Rule(tamano_taza['pequeno'] & temperatura_ambiental['frio'] & intensidad_cafe['suave'], ( nivel_agua['poca'], cantidad_cafe['poca'],cantidad_leche['media'], tiempo_preparacion['media']))
@@ -238,7 +238,7 @@ def rules(tipo, cantidad_preparar, temperatura_ambiente, intensidad, tamano_taza
         pausa()
         tiempo_preparacion.view(sim=preparacion)
         pausa()
-        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), (preparacion.output['nivelAgua'], preparacion.output['cantidadCafe'], preparacion.output['cantidadLeche'], 0, preparacion.output['tpoPreparacion']) )
+        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), (aprox(preparacion.output['nivelAgua'], nivel_agua), aprox( preparacion.output['cantidadCafe'], cantidad_cafe), aprox(preparacion.output['cantidadLeche'], cantidad_leche), 0, aprox(preparacion.output['tpoPreparacion']), tiempo_preparacion ) )
 
 
     if tipo == 'mokaccino':
@@ -290,4 +290,4 @@ def rules(tipo, cantidad_preparar, temperatura_ambiente, intensidad, tamano_taza
         pausa()
         tiempo_preparacion.view(sim=preparacion)
         pausa()
-        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), (preparacion.output['nivelAgua'], preparacion.output['cantidadCafe'], preparacion.output['cantidadLeche'], preparacion.output['cantidadChocolate'], preparacion.output['tpoPreparacion']) )
+        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), ( aprox(preparacion.output['nivelAgua'], nivel_agua), aprox(preparacion.output['cantidadCafe'], cantidad_cafe), aprox(preparacion.output['cantidadLeche'], cantidad_leche), aprox(preparacion.output['cantidadChocolate'], cantidad_chocolate), aprox(preparacion.output['tpoPreparacion'], tiempo_preparacion)) )
