@@ -1,5 +1,0 @@
-Nivel de agua: 56.42857142857143
-Cantidad de cafe: 16.692857142857143
-Cantidad de leche: 3.385714285714286
-Cantidad de chocolate: 3.385714285714286
-Tiempo de preparacion: 0.3761904761904761

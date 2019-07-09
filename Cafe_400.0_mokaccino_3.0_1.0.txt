@@ -1,5 +1,0 @@
-Nivel de agua: 300.0ml
-Cantidad de cafe: 13.5grs
-Cantidad de leche: 13.5grs
-Cantidad de chocolate: 4.5grs
-Tiempo de preparacion: 1.8minutos
