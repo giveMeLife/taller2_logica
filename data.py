@@ -3,12 +3,26 @@ import numpy as np
 from skfuzzy import control as ctrl
 
 
+def pausa():
+    print("Ingrese un caracter para continuar: ")
+    input()
+
 def aprox(value, array):
     x = np.copy(array)
     x = x-value
     x = x[x>=0]
     index = x.argmin()
     return(x[index]+value)
+
+
+def salida(antecedentes, salidas):
+    file = open("Cafe_"+str(antecedentes[1])+"_"+str(antecedentes[0])+"_"+str(antecedentes[2])+'_'+str(antecedentes[3])+'.txt', 'w')
+    file.write("Nivel de agua: "+str(salidas[0])+"ml\n")
+    file.write("Cantidad de cafe: "+str(salidas[1])+"grs\n")
+    file.write("Cantidad de leche: "+str(salidas[2])+"grs\n")
+    file.write("Cantidad de chocolate: "+str(salidas[3])+"grs\n")
+    file.write("Tiempo de preparacion: "+str(salidas[4])+"minutos\n")
+    file.close()
 
 def antecedentes():
     tamano_taza = ctrl.Antecedent(np.arange(0,450,30),'tamanoTaza')
@@ -64,10 +78,17 @@ def rules(tipo, cantidad_preparar, temperatura_ambiente, intensidad, tamano_taza
         preparacion.input['tempAmbiental'] = temperatura_ambiente
         preparacion.input['intensidadCafe'] = intensidad
         preparacion.compute()
-        print(preparacion.output['nivelAgua'])
-        print(preparacion.output['cantidadCafe'])
-        print(preparacion.output['tpoPreparacion'])
-    
+        nivel_agua.view(sim=preparacion)
+        pausa()
+        cantidad_cafe.view(sim=preparacion)
+        pausa()
+        tiempo_preparacion.view(sim=preparacion)
+        pausa()
+        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), (preparacion.output['nivelAgua'], preparacion.output['cantidadCafe'],0, 0, preparacion.output['tpoPreparacion']) )
+
+        
+
+
     elif tipo == 'capuccino':
         rule1 = ctrl.Rule(tamano_taza['pequeno'] & temperatura_ambiental['frio'] & intensidad_cafe['suave'], ( nivel_agua['poca'], cantidad_cafe['poca'],cantidad_leche['media'], tiempo_preparacion['media']))
         rule2 = ctrl.Rule(tamano_taza['pequeno'] & temperatura_ambiental['calido'] & intensidad_cafe['fuerte'], ( nivel_agua['poca'], cantidad_cafe['media'],cantidad_leche['poca'], tiempo_preparacion['poca']))
@@ -107,10 +128,15 @@ def rules(tipo, cantidad_preparar, temperatura_ambiente, intensidad, tamano_taza
         preparacion.input['tempAmbiental'] = temperatura_ambiente
         preparacion.input['intensidadCafe'] = intensidad
         preparacion.compute()
-        print(preparacion.output['nivelAgua'])
-        print(preparacion.output['cantidadCafe'])
-        print(preparacion.output['cantidadLeche'])
-        print(preparacion.output['tpoPreparacion'])
+        nivel_agua.view(sim=preparacion)
+        pausa()
+        cantidad_cafe.view(sim=preparacion)
+        pausa()
+        cantidad_leche.view(sim=preparacion)
+        pausa()
+        tiempo_preparacion.view(sim=preparacion)
+        pausa()
+        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), (preparacion.output['nivelAgua'], preparacion.output['cantidadCafe'], preparacion.output['cantidadLeche'], 0, preparacion.output['tpoPreparacion']) )
 
     if tipo == 'latte':
         rule1 = ctrl.Rule(tamano_taza['pequeno'] & temperatura_ambiental['frio'] & intensidad_cafe['suave'], ( nivel_agua['poca'], cantidad_cafe['poca'],cantidad_leche['media'], tiempo_preparacion['media']))
@@ -151,10 +177,16 @@ def rules(tipo, cantidad_preparar, temperatura_ambiente, intensidad, tamano_taza
         preparacion.input['tempAmbiental'] = temperatura_ambiente
         preparacion.input['intensidadCafe'] = intensidad
         preparacion.compute()
-        print(preparacion.output['nivelAgua'])
-        print(preparacion.output['cantidadCafe'])
-        print(preparacion.output['cantidadLeche'])
-        print(preparacion.output['tpoPreparacion'])
+        nivel_agua.view(sim=preparacion)
+        pausa()
+        cantidad_cafe.view(sim=preparacion)
+        pausa()
+        cantidad_leche.view(sim=preparacion)
+        pausa()
+        tiempo_preparacion.view(sim=preparacion)
+        pausa()
+        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), (preparacion.output['nivelAgua'], preparacion.output['cantidadCafe'], preparacion.output['cantidadLeche'], 0, preparacion.output['tpoPreparacion']) )
+
 
     if tipo == 'mokaccino':
         rule1 = ctrl.Rule(tamano_taza['pequeno'] & temperatura_ambiental['calido'] & intensidad_cafe['fuerte'], ( nivel_agua['poca'], cantidad_cafe['media'],cantidad_leche['poca'], cantidad_chocolate['poca'], tiempo_preparacion['poca']))
@@ -195,8 +227,14 @@ def rules(tipo, cantidad_preparar, temperatura_ambiente, intensidad, tamano_taza
         preparacion.input['tempAmbiental'] = temperatura_ambiente
         preparacion.input['intensidadCafe'] = intensidad
         preparacion.compute()
-        print(preparacion.output['nivelAgua'])
-        print(preparacion.output['cantidadCafe'])
-        print(preparacion.output['cantidadLeche'])
-        print(preparacion.output['cantidadChocolate'])
-        print(preparacion.output['tpoPreparacion'])
+        nivel_agua.view(sim=preparacion)
+        pausa()
+        cantidad_cafe.view(sim=preparacion)
+        pausa()
+        cantidad_leche.view(sim=preparacion)
+        pausa()
+        cantidad_chocolate.view(sim=preparacion)
+        pausa()
+        tiempo_preparacion.view(sim=preparacion)
+        pausa()
+        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), (preparacion.output['nivelAgua'], preparacion.output['cantidadCafe'], preparacion.output['cantidadLeche'], preparacion.output['cantidadChocolate'], preparacion.output['tpoPreparacion']) )

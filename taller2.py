@@ -6,12 +6,34 @@ import sys
 sys.path.append('//data.py')
 import data
 
+def comprobacion(argv):
+    if len(argv)<5:
+        return False,'Cantidad de argumentos menor a 4'    
+    elif len(argv)>5:
+        return False,'Cantidad de argumentos mayor a 4'
+    else:
+        try:
+            float(argv[2])
+            float(argv[3])
+            float(argv[4])
+            if(argv[1].lower() != 'espresso' and argv[1].lower() != 'latte' and argv[1].lower() != 'mokaccino' and argv[1] != 'capuccino' ):
+                return False, 'Los tipos de preparacion son: Espresso, Latte, Capuccino o Mokaccino'
+            return True, '0'
+        except ValueError:
+            return False, 'cantidadCafe, temperatura ambiental e intensidad deben ser valores numericos'
+        
 
 
-cantidadCafe = 90
-temperatura = 120
-intensidad = 3
-tipo = 'Espresso'
+aux = comprobacion(sys.argv)
+if aux[0] == False:
+    print(aux[1])
+    sys.exit()
+else:
+    print('los valores ingresados son:\n >Tipo preparacion: %s \n >Tamano taza: %s \n >Temperatura ambiental: %s \n >Intensidad preparacion: %s' %(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
+cantidadCafe = float(sys.argv[2])
+temperatura = float(sys.argv[3])
+intensidad = float(sys.argv[4])
+tipo = sys.argv[1].lower()
 
 
 tamano_taza = ctrl.Antecedent(np.arange(0,450,30),'tamanoTaza')
@@ -23,6 +45,7 @@ cantidad_cafe = ctrl.Consequent(np.arange(0,22,1.5),'cantidadCafe')
 cantidad_leche = ctrl.Consequent(np.arange(0,22,1.5),'cantidadLeche')
 cantidad_chocolate = ctrl.Consequent(np.arange(0,22,1.5),'cantidadChocolate')
 tiempo_preparacion = ctrl.Consequent(np.arange(0,3,0.2),'tpoPreparacion')
+
 
 #Antecedentes
 tamano_taza['pequeno'] = fuzz.trimf(tamano_taza.universe, [0,0,150])
@@ -60,5 +83,13 @@ tiempo_preparacion['poca'] = fuzz.trimf(tiempo_preparacion.universe, [0,0,1])
 tiempo_preparacion['media'] = fuzz.trimf(tiempo_preparacion.universe, [0.8,1,2])
 tiempo_preparacion['mucha'] = fuzz.trimf(tiempo_preparacion.universe, [1.8,2,3])
 
+#graficos antecedentes
+tamano_taza.view()
+data.pausa()
+
+temperatura_ambiental.view()
+data.pausa()
+intensidad_cafe.view()
+data.pausa()
 
 data.rules('mokaccino',cantidadCafe, temperatura, intensidad, tamano_taza, temperatura_ambiental, intensidad_cafe, nivel_agua, cantidad_cafe, tiempo_preparacion, cantidad_leche, cantidad_chocolate)
