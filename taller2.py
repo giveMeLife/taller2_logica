@@ -2,6 +2,11 @@ import  skfuzzy  as  fuzz
 import numpy as np
 import matplotlib.pyplot as plt
 from skfuzzy import control as ctrl
+import sys
+sys.path.append('//data.py')
+import data
+
+
 
 cantidadCafe = 90
 temperatura = 120
@@ -16,6 +21,7 @@ intensidad_cafe = ctrl.Antecedent(np.arange(0,6,0.4),'intensidadCafe')
 nivel_agua = ctrl.Consequent(np.arange(0, 450, 30),'nivelAgua')
 cantidad_cafe = ctrl.Consequent(np.arange(0,22,1.5),'cantidadCafe')
 cantidad_leche = ctrl.Consequent(np.arange(0,22,1.5),'cantidadLeche')
+cantidad_chocolate = ctrl.Consequent(np.arange(0,22,1.5),'cantidadChocolate')
 tiempo_preparacion = ctrl.Consequent(np.arange(0,3,0.2),'tpoPreparacion')
 
 #Antecedentes
@@ -46,25 +52,13 @@ cantidad_leche['poca'] = fuzz.trimf(cantidad_leche.universe, [0,0,9])
 cantidad_leche['media'] = fuzz.trimf(cantidad_leche.universe, [7.5,9,15])
 cantidad_leche['mucha'] = fuzz.trimf(cantidad_leche.universe, [13.5,15,21])
 
+cantidad_chocolate['poca'] = fuzz.trimf(cantidad_chocolate.universe, [0,0,9])
+cantidad_chocolate['media'] = fuzz.trimf(cantidad_chocolate.universe, [7.5,9,15])
+cantidad_chocolate['mucha'] = fuzz.trimf(cantidad_chocolate.universe, [13.5,15,21])
+
 tiempo_preparacion['poca'] = fuzz.trimf(tiempo_preparacion.universe, [0,0,1])
 tiempo_preparacion['media'] = fuzz.trimf(tiempo_preparacion.universe, [0.8,1,2])
 tiempo_preparacion['mucha'] = fuzz.trimf(tiempo_preparacion.universe, [1.8,2,3])
 
-rule1 = ctrl.Rule(tamano_taza['pequeno'] & temperatura_ambiental['frio'] & intensidad_cafe['suave'], ( nivel_agua['poca'], cantidad_cafe['poca'], tiempo_preparacion['media']))
-rule2 = ctrl.Rule(tamano_taza['pequeno'] & temperatura_ambiental['calido'] & intensidad_cafe['fuerte'], ( nivel_agua['poca'], cantidad_cafe['media'], tiempo_preparacion['poca']))
-rule3 = ctrl.Rule(tamano_taza['mediano'] & temperatura_ambiental['calido'] & intensidad_cafe['medio'], ( nivel_agua['media'], cantidad_cafe['media'], tiempo_preparacion['poca']))
 
-
-
-
-rule1.view()
-input()
-espresso_ctrl = ctrl.ControlSystem(rule1)
-espresso = ctrl.ControlSystemSimulation(espresso_ctrl)
-
-espresso.input['tamanoTaza'] = 30
-espresso.input['tempAmbiental'] = 9
-espresso.input['intensidadCafe'] = 4
-
-espresso.compute()
-print(espresso.output['nivelAgua'])
+data.rules('mokaccino',cantidadCafe, temperatura, intensidad, tamano_taza, temperatura_ambiental, intensidad_cafe, nivel_agua, cantidad_cafe, tiempo_preparacion, cantidad_leche, cantidad_chocolate)
