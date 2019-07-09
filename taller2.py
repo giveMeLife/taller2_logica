@@ -36,15 +36,9 @@ intensidad = float(sys.argv[4])
 tipo = sys.argv[1].lower()
 
 
-tamano_taza = ctrl.Antecedent(np.arange(0,450,30),'tamanoTaza')
-temperatura_ambiental = ctrl.Antecedent(np.arange(0,45,3),'tempAmbiental')
-intensidad_cafe = ctrl.Antecedent(np.arange(0,6,0.4),'intensidadCafe')
+tamano_taza, temperatura_ambiental, intensidad_cafe = data.antecedentes()
 
-nivel_agua = ctrl.Consequent(np.arange(0, 450, 30),'nivelAgua')
-cantidad_cafe = ctrl.Consequent(np.arange(0,22,1.5),'cantidadCafe')
-cantidad_leche = ctrl.Consequent(np.arange(0,22,1.5),'cantidadLeche')
-cantidad_chocolate = ctrl.Consequent(np.arange(0,22,1.5),'cantidadChocolate')
-tiempo_preparacion = ctrl.Consequent(np.arange(0,3,0.2),'tpoPreparacion')
+nivel_agua, cantidad_cafe, cantidad_leche, cantidad_chocolate, tiempo_preparacion = data.consecuentes()
 
 
 #Antecedentes

@@ -3,10 +3,22 @@ import numpy as np
 from skfuzzy import control as ctrl
 
 
+''' 
+Función que pausa la ejecución del programa
+Entrada:
+Proceso: Se printea un mensaje y se espera a una entrada cualquiera
+Salida:
+'''
 def pausa():
     print("Ingrese un caracter para continuar: ")
     input()
 
+''' 
+Función que aproxima un valor a su techo más cercano en un arreglo
+Entrada:value->entero array->arreglo numpy
+Proceso: Se busca el valor con una diferencia más cercana dentro del arreglo
+salida: Retorna el valor conocido como techo
+'''
 def aprox(value, array):
     x = np.copy(array)
     x = x-value
@@ -15,6 +27,12 @@ def aprox(value, array):
     return(x[index]+value)
 
 
+'''
+Función que escribe en un archivo de texto las salidas
+Entrada: antecedentes->Arreglo con antecedentes, salidas->Arreglo con salidas defusificada
+Proceso: Se escribe en el archivo los elementos de los arreglos de entrada
+Salida:
+'''
 def salida(antecedentes, salidas):
     file = open("Cafe_"+str(antecedentes[1])+"_"+str(antecedentes[0])+"_"+str(antecedentes[2])+'_'+str(antecedentes[3])+'.txt', 'w')
     file.write("Nivel de agua: "+str(salidas[0])+"ml\n")
@@ -24,21 +42,56 @@ def salida(antecedentes, salidas):
     file.write("Tiempo de preparacion: "+str(salidas[4])+"minutos\n")
     file.close()
 
+
+''' 
+Función que retorna los antecedentes a utilizar para aplicar lógica difusa
+Entrada:
+Proceso: Crea los antecedentes
+Salida:
+'''
 def antecedentes():
     tamano_taza = ctrl.Antecedent(np.arange(0,450,30),'tamanoTaza')
     temperatura_ambiental = ctrl.Antecedent(np.arange(0,45,3),'tempAmbiental')
     intensidad_cafe = ctrl.Antecedent(np.arange(0,6,0.4),'intensidadCafe')
     return tamano_taza, temperatura_ambiental, intensidad_cafe
 
+''' 
+Función que retorna los consecuentes a utilizar para aplicar lógica difusa
+Entrada:
+Proceso: Crea los consecuentes
+Salida:
+'''
 def consecuentes():
     nivel_agua = ctrl.Consequent(np.arange(0, 450, 30),'nivelAgua')
     cantidad_cafe = ctrl.Consequent(np.arange(0,22,1.5),'cantidadCafe')
     cantidad_leche = ctrl.Consequent(np.arange(0,22,1.5),'cantidadLeche')
+    cantidad_chocolate = ctrl.Consequent(np.arange(0,22,1.5), 'cantidadChocolate')
     tiempo_preparacion = ctrl.Consequent(np.arange(0,3,0.2),'tpoPreparacion')
-    return nivel_agua. cantidad_cafe, cantidad_leche, tiempo_preparacion
+    return nivel_agua, cantidad_cafe, cantidad_leche, cantidad_chocolate, tiempo_preparacion
 
 
+'''
+En esta funcion ocurre la lógica principal del programa, ya que se definen las reglas de antecedentes->consecuencias, y luego se calculan las
+defusificaciones de los valores consecuentes, los cuales son enviados para ser escritos en un archivo de texto.
+
+Función que se encarga de crear las reglas de la lógica difusa para generar los resultados de los consecuentes.
+Entradas: tipo de cafe, cantidad a preparar, temperatura ambiente, intensidad cafe -> flotante
+          tamano_taza, temperatura_ambiental, intensidad_cafe -> Antecedentes
+          nivel_agua, cantidad_cafe, tiempo_preparacion, cantidad_leche, cantidad_chocolate -> consecuentes
+Salida:
+
+'''
 def rules(tipo, cantidad_preparar, temperatura_ambiente, intensidad, tamano_taza, temperatura_ambiental, intensidad_cafe, nivel_agua, cantidad_cafe, tiempo_preparacion, cantidad_leche, cantidad_chocolate):
+    
+    '''
+    La funcion Rule, crea las reglas a utilizar en la logica difusa, donde se anotan los antecedentes, con las variables lócias, and, or, not, segun corresponda
+    aplicando internamente mamdani, utilizando función mínimo o máximo o complemento según corresponda. 
+
+    Finalmente, al realizar la defusificacion se usa ControlSystem para poder juntar todas las reglas y obtener los valores que mas se acomoden
+    a las reglas.
+
+    Con controlSystemSimulation se simula el sistema difuso, y finalmente con input se ingresan las entradas. 
+    '''
     if tipo == 'espresso':
         rule1 = ctrl.Rule(tamano_taza['pequeno'] & temperatura_ambiental['frio'] & intensidad_cafe['suave'], ( nivel_agua['poca'], cantidad_cafe['poca'], tiempo_preparacion['media']))
         rule2 = ctrl.Rule(tamano_taza['pequeno'] & temperatura_ambiental['calido'] & intensidad_cafe['fuerte'], ( nivel_agua['poca'], cantidad_cafe['media'], tiempo_preparacion['poca']))
