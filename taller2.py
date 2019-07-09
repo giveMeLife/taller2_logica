@@ -2,43 +2,44 @@ import  skfuzzy  as  fuzz
 import numpy as np
 import matplotlib.pyplot as plt
 from skfuzzy import control as ctrl
+import random
 import sys
 sys.path.append('//data.py')
 import data
 
+
 def comprobacion(argv):
-    if len(argv)<5:
-        return False,'Cantidad de argumentos menor a 4'    
-    elif len(argv)>5:
-        return False,'Cantidad de argumentos mayor a 4'
+    if len(argv)<4:
+        return False,'Cantidad de argumentos menor a 3'    
+    elif len(argv)>4:
+        return False,'Cantidad de argumentos mayor a 3'
     else:
         try:
             float(argv[2])
             float(argv[3])
-            float(argv[4])
             if(argv[1].lower() != 'espresso' and argv[1].lower() != 'latte' and argv[1].lower() != 'mokaccino' and argv[1] != 'capuccino' ):
                 return False, 'Los tipos de preparacion son: Espresso, Latte, Capuccino o Mokaccino'
             return True, '0'
         except ValueError:
-            return False, 'cantidadCafe, temperatura ambiental e intensidad deben ser valores numericos'
+            return False, 'cantidadCafe e intensidad deben ser valores numericos'
         
+tamano_taza, temperatura_ambiental, intensidad_cafe = data.antecedentes()
 
+nivel_agua, cantidad_cafe, cantidad_leche, cantidad_chocolate, tiempo_preparacion = data.consecuentes()
 
+temperatura = random.choice(temperatura_ambiental.universe)
 aux = comprobacion(sys.argv)
 if aux[0] == False:
     print(aux[1])
     sys.exit()
 else:
-    print('los valores ingresados son:\n >Tipo preparacion: %s \n >Tamano taza: %s \n >Temperatura ambiental: %s \n >Intensidad preparacion: %s' %(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
+    print('los valores ingresados son:\n >Tipo preparacion: %s \n >Tamano taza: %s \n >Temperatura ambiental: %s \n >Intensidad preparacion: %s' %(sys.argv[1], sys.argv[2], str(temperatura), sys.argv[3]))
 cantidadCafe = float(sys.argv[2])
-temperatura = float(sys.argv[3])
-intensidad = float(sys.argv[4])
+intensidad = float(sys.argv[3])
 tipo = sys.argv[1].lower()
 
 
-tamano_taza, temperatura_ambiental, intensidad_cafe = data.antecedentes()
 
-nivel_agua, cantidad_cafe, cantidad_leche, cantidad_chocolate, tiempo_preparacion = data.consecuentes()
 
 
 #Antecedentes
@@ -86,5 +87,5 @@ data.pausa()
 intensidad_cafe.view()
 data.pausa()
 
-data.rules(sys.argv[1].lower(),cantidadCafe, temperatura, intensidad, tamano_taza, temperatura_ambiental, intensidad_cafe, nivel_agua, cantidad_cafe, tiempo_preparacion, cantidad_leche, cantidad_chocolate)
+data.rules(tipo,cantidadCafe, temperatura, intensidad, tamano_taza, temperatura_ambiental, intensidad_cafe, nivel_agua, cantidad_cafe, tiempo_preparacion, cantidad_leche, cantidad_chocolate)
 print("Programa finalizado con exito!!! Disfrute su cafe!!!")
