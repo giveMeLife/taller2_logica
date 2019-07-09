@@ -86,5 +86,5 @@ data.pausa()
 intensidad_cafe.view()
 data.pausa()
 
-data.rules(sys.arg[1].lower(),cantidadCafe, temperatura, intensidad, tamano_taza, temperatura_ambiental, intensidad_cafe, nivel_agua, cantidad_cafe, tiempo_preparacion, cantidad_leche, cantidad_chocolate)
+data.rules(sys.argv[1].lower(),cantidadCafe, temperatura, intensidad, tamano_taza, temperatura_ambiental, intensidad_cafe, nivel_agua, cantidad_cafe, tiempo_preparacion, cantidad_leche, cantidad_chocolate)
 print("Programa finalizado con exito!!! Disfrute su cafe!!!")
