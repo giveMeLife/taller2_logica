@@ -20,7 +20,7 @@ Proceso: Se busca el valor con una diferencia más cercana dentro del arreglo
 salida: Retorna el valor conocido como techo
 '''
 def aprox(value, array):
-    x = np.copy(array.universe)
+    x = np.copy(array)
     x = x-value
     x = x[x>=0]
     index = x.argmin()
@@ -131,12 +131,14 @@ def rules(tipo, cantidad_preparar, temperatura_ambiente, intensidad, tamano_taza
         preparacion.input['tempAmbiental'] = temperatura_ambiente
         preparacion.input['intensidadCafe'] = intensidad
         preparacion.compute()
-        nivel_agua.view(sim=preparacion)
-        pausa()
-        cantidad_cafe.view(sim=preparacion)
-        pausa()
-        tiempo_preparacion.view(sim=preparacion)
-        pausa()
+        
+        ##########################DESCOMENTAR SI SE QUIERE VER GRAFICOS###########################
+        # nivel_agua.view(sim=preparacion)
+        # pausa()
+        # cantidad_cafe.view(sim=preparacion)
+        # pausa()
+        # tiempo_preparacion.view(sim=preparacion)
+        # pausa()
         salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), ( aprox(preparacion.output['nivelAgua'], nivel_agua.universe), aprox(preparacion.output['cantidadCafe'], cantidad_cafe.universe),0, 0, aprox(preparacion.output['tpoPreparacion'], tiempo_preparacion.universe) ) )
 
         
@@ -181,15 +183,15 @@ def rules(tipo, cantidad_preparar, temperatura_ambiente, intensidad, tamano_taza
         preparacion.input['tempAmbiental'] = temperatura_ambiente
         preparacion.input['intensidadCafe'] = intensidad
         preparacion.compute()
-        nivel_agua.view(sim=preparacion)
-        pausa()
-        cantidad_cafe.view(sim=preparacion)
-        pausa()
-        cantidad_leche.view(sim=preparacion)
-        pausa()
-        tiempo_preparacion.view(sim=preparacion)
-        pausa()
-        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), (aprox(preparacion.output['nivelAgua'],nivel_agua), aprox(preparacion.output['cantidadCafe'], cantidad_cafe), aprox(preparacion.output['cantidadLeche'],cantidad_leche), 0, aprox(preparacion.output['tpoPreparacion'],tiempo_preparacion) ))
+        # nivel_agua.view(sim=preparacion)
+        # pausa()
+        # cantidad_cafe.view(sim=preparacion)
+        # pausa()
+        # cantidad_leche.view(sim=preparacion)
+        # pausa()
+        # tiempo_preparacion.view(sim=preparacion)
+        # pausa()
+        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), (aprox(preparacion.output['nivelAgua'],nivel_agua.universe), aprox(preparacion.output['cantidadCafe'], cantidad_cafe.universe), aprox(preparacion.output['cantidadLeche'],cantidad_leche.universe), 0, aprox(preparacion.output['tpoPreparacion'],tiempo_preparacion.universe) ))
 
     if tipo == 'latte':
         rule1 = ctrl.Rule(tamano_taza['pequeno'] & temperatura_ambiental['frio'] & intensidad_cafe['suave'], ( nivel_agua['poca'], cantidad_cafe['poca'],cantidad_leche['media'], tiempo_preparacion['media']))
@@ -230,15 +232,15 @@ def rules(tipo, cantidad_preparar, temperatura_ambiente, intensidad, tamano_taza
         preparacion.input['tempAmbiental'] = temperatura_ambiente
         preparacion.input['intensidadCafe'] = intensidad
         preparacion.compute()
-        nivel_agua.view(sim=preparacion)
-        pausa()
-        cantidad_cafe.view(sim=preparacion)
-        pausa()
-        cantidad_leche.view(sim=preparacion)
-        pausa()
-        tiempo_preparacion.view(sim=preparacion)
-        pausa()
-        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), (aprox(preparacion.output['nivelAgua'], nivel_agua), aprox( preparacion.output['cantidadCafe'], cantidad_cafe), aprox(preparacion.output['cantidadLeche'], cantidad_leche), 0, aprox(preparacion.output['tpoPreparacion']), tiempo_preparacion ) )
+        # nivel_agua.view(sim=preparacion)
+        # pausa()
+        # cantidad_cafe.view(sim=preparacion)
+        # pausa()
+        # cantidad_leche.view(sim=preparacion)
+        # pausa()
+        # tiempo_preparacion.view(sim=preparacion)
+        # pausa()
+        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), (aprox(preparacion.output['nivelAgua'], nivel_agua.universe), aprox( preparacion.output['cantidadCafe'], cantidad_cafe.universe), aprox(preparacion.output['cantidadLeche'], cantidad_leche.universe), 0, aprox(preparacion.output['tpoPreparacion'], tiempo_preparacion.universe ) ) )
 
 
     if tipo == 'mokaccino':
@@ -280,14 +282,14 @@ def rules(tipo, cantidad_preparar, temperatura_ambiente, intensidad, tamano_taza
         preparacion.input['tempAmbiental'] = temperatura_ambiente
         preparacion.input['intensidadCafe'] = intensidad
         preparacion.compute()
-        nivel_agua.view(sim=preparacion)
-        pausa()
-        cantidad_cafe.view(sim=preparacion)
-        pausa()
-        cantidad_leche.view(sim=preparacion)
-        pausa()
-        cantidad_chocolate.view(sim=preparacion)
-        pausa()
-        tiempo_preparacion.view(sim=preparacion)
-        pausa()
-        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), ( aprox(preparacion.output['nivelAgua'], nivel_agua), aprox(preparacion.output['cantidadCafe'], cantidad_cafe), aprox(preparacion.output['cantidadLeche'], cantidad_leche), aprox(preparacion.output['cantidadChocolate'], cantidad_chocolate), aprox(preparacion.output['tpoPreparacion'], tiempo_preparacion)) )
+        # nivel_agua.view(sim=preparacion)
+        # pausa()
+        # cantidad_cafe.view(sim=preparacion)
+        # pausa()
+        # cantidad_leche.view(sim=preparacion)
+        # pausa()
+        # cantidad_chocolate.view(sim=preparacion)
+        # pausa()
+        # tiempo_preparacion.view(sim=preparacion)
+        # pausa()
+        salida( (tipo,cantidad_preparar,intensidad, temperatura_ambiente), ( aprox(preparacion.output['nivelAgua'], nivel_agua.universe), aprox(preparacion.output['cantidadCafe'], cantidad_cafe.universe), aprox(preparacion.output['cantidadLeche'], cantidad_leche.universe), aprox(preparacion.output['cantidadChocolate'], cantidad_chocolate.universe), aprox(preparacion.output['tpoPreparacion'], tiempo_preparacion.universe)) )

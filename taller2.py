@@ -17,7 +17,7 @@ def comprobacion(argv):
         try:
             float(argv[2])
             float(argv[3])
-            if(argv[1].lower() != 'espresso' and argv[1].lower() != 'latte' and argv[1].lower() != 'mokaccino' and argv[1] != 'capuccino' ):
+            if(argv[1].lower() != 'espresso' and argv[1].lower() != 'latte' and argv[1].lower() != 'mokaccino' and argv[1].lower() != 'capuccino' ):
                 return False, 'Los tipos de preparacion son: Espresso, Latte, Capuccino o Mokaccino'
             return True, '0'
         except ValueError:
@@ -78,14 +78,16 @@ tiempo_preparacion['poca'] = fuzz.trimf(tiempo_preparacion.universe, [0,0,1])
 tiempo_preparacion['media'] = fuzz.trimf(tiempo_preparacion.universe, [0.8,1,2])
 tiempo_preparacion['mucha'] = fuzz.trimf(tiempo_preparacion.universe, [1.8,2,3])
 
-#graficos antecedentes
-tamano_taza.view()
-data.pausa()
 
-temperatura_ambiental.view()
-data.pausa()
-intensidad_cafe.view()
-data.pausa()
+############################DESCOMENTAR SI SE QUIERE VER GRAFICOS#############################
+#graficos antecedentes
+# tamano_taza.view()
+# data.pausa()
+
+# temperatura_ambiental.view()
+# data.pausa()
+# intensidad_cafe.view()
+# data.pausa()
 
 data.rules(tipo,cantidadCafe, temperatura, intensidad, tamano_taza, temperatura_ambiental, intensidad_cafe, nivel_agua, cantidad_cafe, tiempo_preparacion, cantidad_leche, cantidad_chocolate)
 print("Programa finalizado con exito!!! Disfrute su cafe!!!")
